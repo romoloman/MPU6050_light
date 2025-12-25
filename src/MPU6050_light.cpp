@@ -23,6 +23,7 @@ MPU6050::MPU6050(TwoWire &w){
   setFilterGyroCoef(DEFAULT_GYRO_COEFF);
   setGyroOffsets(0,0,0);
   setAccOffsets(0,0,0);
+  angleX=0;
 }
 
 byte MPU6050::begin(int gyro_config_num, int acc_config_num){
