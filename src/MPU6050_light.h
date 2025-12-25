@@ -27,6 +27,9 @@
 #define MPU6050_ACCEL_OUT_REGISTER    0x3B
 
 #define RAD_2_DEG             57.29578 // [deg/rad]
+#ifndef DEG_2_RAD
+#define DEG_2_RAD 0.01745329251994329576923690768489 // (PI / 180)
+#endif
 #define CALIB_OFFSET_NB_MES   500
 #define TEMP_LSB_2_DEGREE     340.0    // [bit/celsius]
 #define TEMP_LSB_OFFSET       12412.0
@@ -88,6 +91,7 @@ class MPU6050{
   float getAngleX(){ return angleX; };
   float getAngleY(){ return angleY; };
   float getAngleZ(){ return angleZ; };
+  float getPlane();
 
 	// INLOOP UPDATE
   void fetchData(); // user should better call 'update' that includes 'fetchData'

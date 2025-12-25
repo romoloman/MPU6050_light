@@ -215,3 +215,17 @@ void MPU6050::update(){
   angleY = wrap(filterGyroCoef*(angleAccY + wrap(angleY + sgZ*gyroY*dt - angleAccY, 90)) + (1.0-filterGyroCoef)*angleAccY, 90);
   angleZ += gyroZ*dt; // not wrapped
 }
+
+float MPU6050::getPlane() {
+  float cos_roll = cos(angleX * DEG_2_RAD);
+  float cos_pitch = cos(angleY * DEG_2_RAD);
+  // Calculate total cosine
+  float cos_tilt = cos_roll * cos_pitch;
+  // Apply arccos to calculate tilt angle in radiants
+  float tilt_rad = acos(cos_tilt);
+  if (pitch_rad>=0) {
+    return - (tilt_rad * (180.0 / 3.1415926535));
+  } else {
+    return (tilt_rad * (180.0 / 3.1415926535));
+  }
+}
