@@ -29,17 +29,22 @@ MPU6050::MPU6050(TwoWire &w){
 }
 
 byte MPU6050::begin(int gyro_config_num, int acc_config_num){
-  // changed calling register sequence [https://github.com/rfetick/MPU6050_light/issues/1] -> thanks to augustosc
-  byte status = writeData(MPU6050_PWR_MGMT_1_REGISTER, 0x01); // check only the first connection with status
-  writeData(MPU6050_SMPLRT_DIV_REGISTER, 0x00);
-  writeData(MPU6050_CONFIG_REGISTER, 0x00);
-  setGyroConfig(gyro_config_num);
-  setAccConfig(acc_config_num);
-  
-  this->update();
-  angleX = this->getAccAngleX();
-  angleY = this->getAccAngleY();
-  preInterval = millis(); // may cause lack of angular accuracy if begin() is much before the first update()
+  // try to connect to the device return immadiately if doesn't answer. 
+  wire->beginTransmission(address);
+  byte status = wire->endTransmission();
+  if (status==0) {
+    // changed calling register sequence [https://github.com/rfetick/MPU6050_light/issues/1] -> thanks to augustosc
+    byte status = writeData(MPU6050_PWR_MGMT_1_REGISTER, 0x01); // check only the first connection with status
+    writeData(MPU6050_SMPLRT_DIV_REGISTER, 0x00);
+    writeData(MPU6050_CONFIG_REGISTER, 0x00);
+    setGyroConfig(gyro_config_num);
+    setAccConfig(acc_config_num);
+    
+    this->update();
+    angleX = this->getAccAngleX();
+    angleY = this->getAccAngleY();
+    preInterval = millis(); // may cause lack of angular accuracy if begin() is much before the first update()
+  }
   return status;
 }
 
@@ -209,5 +214,4 @@ void MPU6050::update(){
   angleX = wrap(filterGyroCoef*(angleAccX + wrap(angleX +     gyroX*dt - angleAccX,180)) + (1.0-filterGyroCoef)*angleAccX,180);
   angleY = wrap(filterGyroCoef*(angleAccY + wrap(angleY + sgZ*gyroY*dt - angleAccY, 90)) + (1.0-filterGyroCoef)*angleAccY, 90);
   angleZ += gyroZ*dt; // not wrapped
-
 }
