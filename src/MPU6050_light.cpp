@@ -23,9 +23,6 @@ MPU6050::MPU6050(TwoWire &w){
   setFilterGyroCoef(DEFAULT_GYRO_COEFF);
   setGyroOffsets(0,0,0);
   setAccOffsets(0,0,0);
-  angleX=0;
-  angleY=0;
-  angleZ=0;
 }
 
 byte MPU6050::begin(int gyro_config_num, int acc_config_num){
@@ -34,7 +31,7 @@ byte MPU6050::begin(int gyro_config_num, int acc_config_num){
   byte status = wire->endTransmission();
   if (status==0) {
     // changed calling register sequence [https://github.com/rfetick/MPU6050_light/issues/1] -> thanks to augustosc
-    byte status = writeData(MPU6050_PWR_MGMT_1_REGISTER, 0x01); // check only the first connection with status
+    status = writeData(MPU6050_PWR_MGMT_1_REGISTER, 0x01); // check only the first connection with status
     writeData(MPU6050_SMPLRT_DIV_REGISTER, 0x00);
     writeData(MPU6050_CONFIG_REGISTER, 0x00);
     setGyroConfig(gyro_config_num);
@@ -223,7 +220,7 @@ float MPU6050::getPlane() {
   float cos_tilt = cos_roll * cos_pitch;
   // Apply arccos to calculate tilt angle in radiants
   float tilt_rad = acos(cos_tilt);
-  if (pitch_rad>=0) {
+  if (angleY>=0) {
     return - (tilt_rad * (180.0 / 3.1415926535));
   } else {
     return (tilt_rad * (180.0 / 3.1415926535));
