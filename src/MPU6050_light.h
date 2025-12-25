@@ -36,78 +36,78 @@
 class MPU6050{
   public:
     // INIT and BASIC FUNCTIONS
-	MPU6050(TwoWire &w);
+  MPU6050(TwoWire &w);
     byte begin(int gyro_config_num=1, int acc_config_num=0);
-	
-	byte writeData(byte reg, byte data);
-    byte readData(byte reg);
-	
-	void calcOffsets(bool is_calc_gyro=true, bool is_calc_acc=true);
-	void calcGyroOffsets(){ calcOffsets(true,false); }; // retro-compatibility with v1.0.0
-	void calcAccOffsets(){ calcOffsets(false,true); }; // retro-compatibility with v1.0.0
-	
-	void setAddress(uint8_t addr){ address = addr; };
-	uint8_t getAddress(){ return address; };
-	
-	// MPU CONFIG SETTER
-	byte setGyroConfig(int config_num);
-	byte setAccConfig(int config_num);
-	
-    void setGyroOffsets(float x, float y, float z);
-	void setAccOffsets(float x, float y, float z);
-	
-	void setFilterGyroCoef(float gyro_coeff);
-	void setFilterAccCoef(float acc_coeff);
 
-	// MPU CONFIG GETTER
-	float getGyroXoffset(){ return gyroXoffset; };
-    float getGyroYoffset(){ return gyroYoffset; };
-    float getGyroZoffset(){ return gyroZoffset; };
-	
-	float getAccXoffset(){ return accXoffset; };
-	float getAccYoffset(){ return accYoffset; };
-	float getAccZoffset(){ return accZoffset; };
-	
-	float getFilterGyroCoef(){ return filterGyroCoef; };
-	float getFilterAccCoef(){ return 1.0-filterGyroCoef; };
+  byte writeData(byte reg, byte data);
+  byte readData(byte reg);
+
+  void calcOffsets(bool is_calc_gyro=true, bool is_calc_acc=true);
+  void calcGyroOffsets(){ calcOffsets(true,false); }; // retro-compatibility with v1.0.0
+  void calcAccOffsets(){ calcOffsets(false,true); }; // retro-compatibility with v1.0.0
+
+  void setAddress(uint8_t addr){ address = addr; };
+  uint8_t getAddress(){ return address; };
+
+  // MPU CONFIG SETTER
+  byte setGyroConfig(int config_num);
+  byte setAccConfig(int config_num);
+
+  void setGyroOffsets(float x, float y, float z);
+  void setAccOffsets(float x, float y, float z);
+
+  void setFilterGyroCoef(float gyro_coeff);
+  void setFilterAccCoef(float acc_coeff);
+
+  // MPU CONFIG GETTER
+  float getGyroXoffset(){ return gyroXoffset; };
+  float getGyroYoffset(){ return gyroYoffset; };
+  float getGyroZoffset(){ return gyroZoffset; };
+
+  float getAccXoffset(){ return accXoffset; };
+  float getAccYoffset(){ return accYoffset; };
+  float getAccZoffset(){ return accZoffset; };
+
+  float getFilterGyroCoef(){ return filterGyroCoef; };
+  float getFilterAccCoef(){ return 1.0-filterGyroCoef; };
 	
 	// DATA GETTER
-    float getTemp(){ return temp; };
+  float getTemp(){ return temp; };
 
-    float getAccX(){ return accX; };
-    float getAccY(){ return accY; };
-    float getAccZ(){ return accZ; };
+  float getAccX(){ return accX; };
+  float getAccY(){ return accY; };
+  float getAccZ(){ return accZ; };
 
-    float getGyroX(){ return gyroX; };
-    float getGyroY(){ return gyroY; };
-    float getGyroZ(){ return gyroZ; };
+  float getGyroX(){ return gyroX; };
+  float getGyroY(){ return gyroY; };
+  float getGyroZ(){ return gyroZ; };
 	
-	float getAccAngleX(){ return angleAccX; };
-    float getAccAngleY(){ return angleAccY; };
+  float getAccAngleX(){ return angleAccX; };
+  float getAccAngleY(){ return angleAccY; };
 
-    float getAngleX(){ return angleX; };
-    float getAngleY(){ return angleY; };
-    float getAngleZ(){ return angleZ; };
+  float getAngleX(){ return angleX; };
+  float getAngleY(){ return angleY; };
+  float getAngleZ(){ return angleZ; };
 
 	// INLOOP UPDATE
-	void fetchData(); // user should better call 'update' that includes 'fetchData'
-    void update();
+  void fetchData(); // user should better call 'update' that includes 'fetchData'
+  void update();
 	
 	// UPSIDE DOWN MOUNTING
 	bool upsideDownMounting = false;
 
 
   private:
-    TwoWire *wire;
-	uint8_t address = MPU6050_ADDR; // 0x68 or 0x69
-	float gyro_lsb_to_degsec, acc_lsb_to_g;
-    float gyroXoffset, gyroYoffset, gyroZoffset;
-	float accXoffset, accYoffset, accZoffset;
-    float temp, accX, accY, accZ, gyroX, gyroY, gyroZ;
-    float angleAccX, angleAccY;
-    float angleX, angleY, angleZ;
-    unsigned long preInterval;
-    float filterGyroCoef; // complementary filter coefficient to balance gyro vs accelero data to get angle
+  TwoWire *wire;
+  uint8_t address = MPU6050_ADDR; // 0x68 or 0x69
+  float gyro_lsb_to_degsec, acc_lsb_to_g;
+  float gyroXoffset, gyroYoffset, gyroZoffset;
+  float accXoffset, accYoffset, accZoffset;
+  float temp, accX, accY, accZ, gyroX, gyroY, gyroZ;
+  float angleAccX, angleAccY;
+  float angleX, angleY, angleZ;
+  unsigned long preInterval;
+  float filterGyroCoef; // complementary filter coefficient to balance gyro vs accelero data to get angle
 };
 
 #endif
